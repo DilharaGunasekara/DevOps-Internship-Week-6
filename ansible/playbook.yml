@@ -1,0 +1,30 @@
+---
+- name: Configure Local Ubuntu Server
+  hosts: local
+  become: yes
+
+  tasks:
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Create application user
+      user:
+        name: appuser
+        shell: /bin/bash
+
+    - name: Ensure Apache service is running
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Create devops project directory
+      file:
+        path: /home/appuser/devops-project
+        state: directory
+        owner: appuser
+        group: appuser
+        mode: '0755'
